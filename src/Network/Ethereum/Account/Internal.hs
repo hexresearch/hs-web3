@@ -27,7 +27,7 @@ import           Control.Monad.Trans            (MonadTrans (..))
 import           Data.Default                   (Default (..))
 import           Lens.Micro                     (Lens', lens)
 
-import           Data.HexString                 (HexString)
+import           HsWeb.HexString                (HexString)
 import           Data.Solidity.Prim             (Address)
 import           Network.Ethereum.Account.Class (Account)
 import qualified Network.Ethereum.Api.Eth       as Eth (getTransactionReceipt)

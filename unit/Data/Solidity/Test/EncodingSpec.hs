@@ -12,7 +12,7 @@ import           Data.Tuple.OneTuple        (OneTuple (..))
 import           Generics.SOP               (Generic, Rep)
 import           Test.Hspec
 
-import           Data.HexString             (hexString)
+import           HsWeb.HexString            (hexString)
 import           Data.Solidity.Abi          (AbiGet, AbiPut, GenericAbiGet,
                                              GenericAbiPut)
 import           Data.Solidity.Abi.Codec    (decode, decode', encode, encode')

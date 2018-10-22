@@ -9,7 +9,7 @@ import           Test.Hspec
 import           Test.Hspec.QuickCheck
 
 import           Crypto.Ethereum
-import           Data.HexString             (HexString)
+import           HsWeb.HexString            (HexString)
 import           Data.Solidity.Prim.Address (fromPubKey)
 
 spec :: Spec

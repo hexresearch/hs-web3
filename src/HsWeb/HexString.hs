@@ -13,7 +13,7 @@
 -- Hex string data type and useful functions.
 --
 
-module Data.HexString where
+module HsWeb.HexString where
 
 import           Data.Aeson              (FromJSON (..), ToJSON (..),
                                           Value (String), withText)
