@@ -3,6 +3,7 @@
 {-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
+{-# LANGUAGE OverloadedStrings      #-}
 {-# LANGUAGE PolyKinds              #-}
 {-# LANGUAGE ScopedTypeVariables    #-}
 {-# LANGUAGE TypeFamilies           #-}
@@ -30,6 +31,8 @@ module Data.Solidity.Event
     , IndexedEvent(..)
     ) where
 
+import           Data.Monoid                  ((<>))
+import           Control.Arrow                (left)
 import           Data.ByteArray               (ByteArrayAccess)
 import           Data.Proxy                   (Proxy (..))
 import           Generics.SOP                 (Generic, I (..), NP (..),
@@ -88,7 +91,8 @@ parseChange :: ( Generic i
              -- ^ is anonymous event
              -> Either String (Event i ni)
 parseChange change anonymous =
-    Event <$> genericArrayParser topics <*> decode data_
+    Event <$> (left ("Indexed: " <>) $ genericArrayParser topics)
+          <*> (left (\msg -> "NonIndexed: " <> msg <> " " <> show data_) $ decode data_)
   where
     topics | anonymous = changeTopics change
            | otherwise = tail (changeTopics change)
