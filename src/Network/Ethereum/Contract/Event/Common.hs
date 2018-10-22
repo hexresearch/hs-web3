@@ -5,6 +5,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE RecordWildCards       #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
+{-# LANGUAGE TupleSections          #-}
 {-# LANGUAGE UndecidableInstances  #-}
 
 -- |
@@ -21,8 +22,10 @@
 
 module Network.Ethereum.Contract.Event.Common  where
 
+import           Control.Arrow                 (left)
 import           Control.Concurrent            (threadDelay)
 import           Control.Exception             (Exception, throwIO)
+import           Control.Monad                 (forM_)
 import           Control.Monad.IO.Class        (liftIO)
 import           Data.Either                   (lefts, rights)
 
@@ -53,10 +56,14 @@ mkFilterChanges :: DecodeEvent i ni e
                 => [Change]
                 -> IO [FilterChange e]
 mkFilterChanges changes =
-  let eChanges = map (\c@Change{..} -> FilterChange c <$> decodeEvent c) changes
+  let eChanges = map (\c@Change{..} -> FilterChange c <$> (left (,c) $ decodeEvent c)) changes
       ls = lefts eChanges
       rs = rights eChanges
-  in if ls /= [] then throwIO (EventParseFailure $ show ls) else pure rs
+  -- in if ls /= [] then throwIO (EventParseFailure $ show ls) else pure rs
+  -- Dirty hack: just skip parse errors
+  in do
+    forM_ ls print
+    pure rs
 
 
 data FilterStreamState e =
